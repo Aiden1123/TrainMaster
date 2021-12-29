@@ -72,6 +72,14 @@ public class TrainsProgram {
 					
 				case "print":
 					switch(instruction[1]) {
+						case "line":
+							lines.find(instruction[2]).printStations();
+							break;
+							
+						case "station":
+							stations.find(instruction[2]).printLines();
+							break;
+					
 						case "lines":
 							lines.printNames();
 							break;
@@ -87,11 +95,28 @@ public class TrainsProgram {
 						case "stationsinfo":
 							stations.printNamesLines();
 							break;
+						
+						case "linesExchanges":
+							lines.printNamesExchanges();
+							break;
 					}
 					break;
 				
 				case "quit":
 					exit_program = true;
+					break;
+					
+				case "save": 
+					{
+						SaveDatabases save = new SaveDatabases(lines, stations);
+						save.writeToFile(instruction[1]);
+					}
+					break;
+					
+				case "load":
+					SaveDatabases load = SaveDatabases.readFromFile(instruction[1]);
+					lines = load.getLines();
+					stations = load.getStations();
 					break;
 					
 				default:

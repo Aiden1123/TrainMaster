@@ -1,8 +1,13 @@
 package trainMaster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Station {
+public class Station  implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1381010956568694060L;
 	ArrayList<Connection> connections;
 	ArrayList<TrainLine> lines;
 	String name;
@@ -16,6 +21,13 @@ public class Station {
 	public void addLine(TrainLine line) {
 		if (!(lines.contains(line))) {
 			lines.add(line);
+			for(TrainLine stationLine: lines) {
+				if (stationLine.equals(line)) {
+					continue;
+				}
+				line.getExchanges().add(new Exchange(this,stationLine));
+				stationLine.getExchanges().add(new Exchange(this,line));
+			}
 		}
 	}
 	

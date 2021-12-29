@@ -1,9 +1,14 @@
 package trainMaster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class StationDatabase {
+public class StationDatabase  implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6082063024799418986L;
 	ArrayList<Station> stations;
 	int count;
 	

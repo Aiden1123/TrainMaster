@@ -1,9 +1,14 @@
 package trainMaster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TrainLineDatabase {
+public class TrainLineDatabase  implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4904328527528733723L;
 	ArrayList<TrainLine> lines;
 	int count;
 	
@@ -56,6 +61,13 @@ public class TrainLineDatabase {
 			System.out.println(i.getName());
 			i.printStations("\t");
 		}
+	}
+	
+	public void printNamesExchanges() {
+		for(TrainLine i: lines) {
+			System.out.println(i.getName());
+			i.printExchanges("\t");
+		}	
 	}
 
 

@@ -1,16 +1,21 @@
 package trainMaster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TrainLine {
+public class TrainLine  implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6343023013881887764L;
 	String name;
 	ArrayList<Station> stations;
-	ArrayList<TrainLine> exchanges;
+	ArrayList<Exchange> exchanges;
 	
 	TrainLine(String name) {
 		this.name = name;
 		this.stations = new ArrayList<Station>();
-		this.exchanges = new ArrayList<TrainLine>();
+		this.exchanges = new ArrayList<Exchange>();
 	}
 	
 	public void addStation(Station station) {
@@ -61,7 +66,19 @@ public class TrainLine {
 			System.out.println(Integer.toString(i++) + ": " + station.getName());
 		}
 	}
+	
+	public void printExchanges() {
+		for(Exchange i: exchanges) {
+			System.out.printf("%s: %s\n",i.getStation().getName(),i.getLine().getName());
+		}
+	}
 
+	public void printExchanges(String message) {
+		for(Exchange i: exchanges) {
+			System.out.printf("%s%s: %s\n",message,i.getStation().getName(),i.getLine().getName());
+		}
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -74,7 +91,7 @@ public class TrainLine {
 		return stations;
 	}
 
-	public ArrayList<TrainLine> getExchanges() {
+	public ArrayList<Exchange> getExchanges() {
 		return exchanges;
 	}
 
