@@ -4,6 +4,10 @@ package trainMaster;
 import java.util.Scanner;
 
 public class TrainsProgram {
+	public static void executeScript(String filename, TrainLineDatabase lines, StationDatabase stations) {
+		
+	}
+	
 	public static void main(String[] args) {
 
 		TrainLineDatabase lines = new TrainLineDatabase();
@@ -12,8 +16,10 @@ public class TrainsProgram {
 		String[] instruction;
 		Boolean exit_program = false;
 		
+		System.out.println("TrainMaster");
+		
 		while(!exit_program) {
-			System.out.println("add line, print lines, print linesinfo, print stations, print stationsinfo, quit");
+			
 			
 			instruction = sc.nextLine().split(" ");
 			
@@ -24,33 +30,44 @@ public class TrainsProgram {
 				case "add": 
 					switch(instruction[1]) {
 						case "line":
-							if (lines.nameExists(instruction[2])) {
-								System.out.println("Name already taken");
-								break;
+							for(int i=2;i<instruction.length;i++) {
+								if (lines.nameExists(instruction[i])) {
+									System.out.println(instruction[i] + " Name already taken!");
+									break;
+								}
+								lines.add(new TrainLine(instruction[i]));
 							}
-							lines.add(new TrainLine(instruction[2]));
 							break;
 						case "station":
-							if (stations.nameExists(instruction[2])) {
-								System.out.println("Name already taken");
-								break;
+							for(int i=2;i<instruction.length;i++) {
+								if (stations.nameExists(instruction[i])) {
+									System.out.println(instruction[i] + " Name already taken!");
+									break;
+								}
+								stations.add(new Station(instruction[i]));
 							}
-							stations.add(new Station(instruction[2]));
 							break;							
 					}
 					break;
 				
 				case "append":
-					if (lines.nameExists(instruction[1]) && stations.nameExists(instruction[2])) {
-						lines.find(instruction[1]).addStation(stations.find(instruction[2]));
+					if (!lines.nameExists(instruction[1])) {
+						System.out.println("Invalid line name");
+						break;
 					}
-					else if (lines.nameExists(instruction[1]) && !stations.nameExists(instruction[2])) {
-						Station aux = new Station(instruction[2]); 
-						stations.add(aux);
-						lines.find(instruction[1]).addStation(aux);
-					}
-					else {
-						System.out.println("Incorrect station or line name");
+					
+					for(int i=2;i<instruction.length;i++) {
+					
+						if (stations.nameExists(instruction[i])) {
+							lines.find(instruction[1]).addStation(stations.find(instruction[i]));
+						}
+						
+						else {
+							Station aux = new Station(instruction[i]); 
+							stations.add(aux);
+							lines.find(instruction[1]).addStation(aux);
+						}
+
 					}
 					break;
 					
