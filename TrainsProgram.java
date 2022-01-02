@@ -1,31 +1,45 @@
 package trainMaster;
 
+import java.io.File;
 //import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TrainsProgram {
+	
+	static TrainLineDatabase lines;
+	static StationDatabase stations;
+	
 	public static void executeScript(String filename, TrainLineDatabase lines, StationDatabase stations) {
-		
+	    try {
+	        File myObj = new File(filename);
+	        Scanner myReader = new Scanner(myObj);
+	        
+	        while (myReader.hasNextLine()) {
+	          menu(myReader.nextLine().split(" "),lines,stations);
+	        }
+	        
+	        myReader.close();
+	      } catch (Exception e) {
+	        System.out.println("An error occurred.");
+	        e.printStackTrace();
+	      }
 	}
 	
-	public static void main(String[] args) {
+	public static void menu(String[] instruction, TrainLineDatabase lines, StationDatabase stations) {
 
-		TrainLineDatabase lines = new TrainLineDatabase();
-		StationDatabase stations = new StationDatabase();
-		Scanner sc=new Scanner(System.in);  
-		String[] instruction;
-		Boolean exit_program = false;
-		
-		System.out.println("TrainMaster");
-		
-		while(!exit_program) {
-			
-			
-			instruction = sc.nextLine().split(" ");
-			
 			try {
 			
 			switch(instruction[0]) {
+			
+				case "exec":
+					executeScript(instruction[1],lines,stations);
+					break;
+					
+				case "route":
+					if (!(stations.find(instruction[1]) == null) && !(stations.find(instruction[2]) == null)) {
+						RouteFinder.FewestExchanges(stations.find(instruction[1]), stations.find(instruction[2]));
+					}
+					break;
 			
 				case "add": 
 					switch(instruction[1]) {
@@ -120,7 +134,6 @@ public class TrainsProgram {
 					break;
 				
 				case "quit":
-					exit_program = true;
 					break;
 					
 				case "save": 
@@ -132,8 +145,8 @@ public class TrainsProgram {
 					
 				case "load":
 					SaveDatabases load = SaveDatabases.readFromFile(instruction[1]);
-					lines = load.getLines();
-					stations = load.getStations();
+					TrainsProgram.lines = load.getLines();
+					TrainsProgram.stations = load.getStations();
 					break;
 					
 				default:
@@ -145,7 +158,25 @@ public class TrainsProgram {
 			} catch (IndexOutOfBoundsException e) {
 				System.out.println("Incorrect instruction");
 			}
+	}
+	
+	public static void main(String[] args) {
+
+		lines = new TrainLineDatabase();
+		stations = new StationDatabase();
+		Scanner sc=new Scanner(System.in);  
+		String[] instruction;
+		
+		System.out.println("TrainMaster");
+		
+		while(true) {
+			instruction = sc.nextLine().split(" ");
+		
+			if(instruction[0].equals("quit")) {
+				break;
+			}
 			
+			menu(instruction,lines,stations);
 		}
 	
 		sc.close();
